@@ -3,3 +3,18 @@
 	margin: 3em 0 1.5em;
 	border-bottom: .1em solid #eee;
 }
+.img-thumbnail{
+	border: 0;
+}
+
+.btn-pick{
+	max-width: 31.5%;
+}
+
+#turnText{
+	float: right;
+}
+
+#searchTurnRow{
+	margin-bottom: 1em;
+}
