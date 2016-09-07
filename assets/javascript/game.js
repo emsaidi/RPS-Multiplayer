@@ -134,6 +134,7 @@ $("#rockP2").on('click', function(){
 	console.log(guessP2);
 	$('#p2Block').hide();
 	$('#p2BlockSelection').html('<button class="btn btn-secondary btn-selection" data-selectionP2="r" id="rockP2"><img src="assets/images/rock.png" class="img-thumbnail" alt="rock"></button>');
+	//run();
 	runRPS();
 });
 
@@ -142,7 +143,9 @@ $("#paperP2").on('click', function(){
 	console.log(guessP2);
 	$('#p2Block').hide();
 	$('#p2BlockSelection').html('<button class="btn btn-secondary btn-selection" data-selectionP2="p" id="paperP2"><img src="assets/images/paper.png" class="img-thumbnail" alt="paper"></button>');
+	//run();
 	runRPS();
+
 });
 
 $("#scissorsP2").on('click', function(){
@@ -150,6 +153,7 @@ $("#scissorsP2").on('click', function(){
 	console.log(guessP1);
 	$('#p2Block').hide();
 	$('#p2BlockSelection').html('<button class="btn btn-secondary btn-selection" data-selectionP2="s" id="scissorsP2"><img src="assets/images/scissors.png" class="img-thumbnail" alt="rock"></button>');
+	//run();
 	runRPS();
 });
 
@@ -160,23 +164,31 @@ function runRPS(){
 			p1Wins++;
 			p2Losses++;
 
+
+
 		}else if ((guessP1 == 'r') && (guessP2 == 'p')){
 			p1Losses++;
 			p2Wins++;
+			P2Wins();
 		}else if ((guessP1 == 's') && (guessP2 == 'r')){
 			p1Losses++;
 			p2Wins++;
+			P2Wins();
 		}else if ((guessP1 == 's') && (guessP2 == 'p')){
 			p1Wins++;
 			p2Losses++;
+			P1Wins();
 		}else if((guessP1 == 'p') && (guessP2 == 'r')){
 			p1Wins++;
 			p2Losses++;
+			P1Wins();
 		}else if((guessP1 == 'p') && (guessP2 == 's')){
 			p1Losses++;
 			p2Wins++;
+			P2Wins();
 		}else if(guessP1 == guessP2){
 			Ties++;
+			YouTie();
 		}
 
 		console.log("P1Wins: " + p1Wins + " P1Losses: " + p1Losses + " Ties: " + Ties + " P2Wins: " + p2Wins + " P2Losses: " + p2Losses);
@@ -189,18 +201,34 @@ function runRPS(){
 			Player2Losses: p2Losses,
 		});
 
-		$('#p1Block').show();
-		$('#p1BlockSelection').empty();
+		$("#scorecardData").append('<tr><td>' + P1 + '</td><td>' + p1Wins + '</td><td>' + p1Losses + '</td></tr><tr><td>' + P2 + '</td><td>' + p2Wins +'</td><td>' + p2Losses + '</td></tr>');
 
-		$('#p2Block').show();
-		$('#p2BlockSelection').empty();
 
-		
+		setTimeout(function() {
+			$('#p1Block').show();
+			$('#p1BlockSelection').empty();
 
+			$('#p2Block').show();
+			$('#p2BlockSelection').empty();
+
+			$('#ScoreboardAnnouncer').empty();
+			console.log("Divs should be back to normal");
+
+		}, 3000);
 	}
 }
 
+function P1Wins(){
+	$('<div>').html('<h4 class="card-title">' + P1 + ' WINS!!!!</h4><img class="img-thumbnail" src="assets/images/social_01.jpg" alt="trophy">').appendTo('#ScoreboardAnnouncer');
+}
 
+function P2Wins(){
+	$('<div>').html('<h4 class="card-title">' + P2 + ' WINS!!!!</h3><img class="img-thumbnail" src="assets/images/social_01.jpg" alt="trophy">').appendTo('#ScoreboardAnnouncer');
+}
+
+function YouTie(){
+	$('<div>').html('<h4 class="card-title">You Tie!</h3><img class="img-thumbnail" src="assets/images/Blue_Stripe_Tie.jpg" alt="trophy">').appendTo('#ScoreboardAnnouncer');
+}
 
 
 // we still need guessP1 and guessP2
