@@ -31,13 +31,13 @@
 				<div class="card">
 					<div class="card-header" id=playerName1>Player Name</div>
 						<div class="card-block" id="p1Block">
-							<button class="btn btn-secondary btn-pick" data-selectionP1="r" id="rockP1">
+							<button class="btn btn-secondary btn-pick" data-selectionP1="r" id="rockP1" data-imgURL="assets/images/rock.png">
 								<img src="assets/images/rock.png" class="img-thumbnail" alt="rock">
 							</button>
-							<button class="btn btn-secondary btn-pick" data-selectionP1="p" id="paperP1">
+							<button class="btn btn-secondary btn-pick" data-selectionP1="p" id="paperP1" data-imgURL="assets/images/paper.png">
 								<img src="assets/images/paper.png" class="img-thumbnail" alt="paper">
 							</button>
-							<button class="btn btn-secondary btn-pick" data-selectionP1="s" id="scissorsP1">
+							<button class="btn btn-secondary btn-pick" data-selectionP1="s" id="scissorsP1" data-imgURL="assets/images/scissors.png">
 								<img src="assets/images/scissors.png" class="img-thumbnail" alt="rock">
 							</button>
 						</div>
@@ -58,6 +58,16 @@
 							</tr>
 						</thead>
 						<tbody id="scorecardData">
+							<tr>
+								<td id="p1Scorecard"></td>
+								<td id="p1WinsScorecard"></td>
+								<td id="p1LossesScorecard"></td>
+							</tr>
+							<tr>
+								<td id="p2Scorecard"></td>
+								<td id="p2WinsScorecard"></td>
+								<td id="p2LossesScorecard"></td>
+							</tr>
 						</tbody>
 					</table>
 
@@ -68,13 +78,13 @@
 				<div class="card">
 					<div class="card-header" id=playerName2>Player Name</div>
 					<div class="card-block" id="p2Block">
-						<button class="btn btn-secondary btn-pick" data-selectionP2="r" id="rockP2">
+						<button class="btn btn-secondary btn-pick" data-selectionP2="r" id="rockP2" data-imgURL="assets/images/rock.png">
 							<img src="assets/images/rock.png" class="img-thumbnail" alt="rock">
 						</button>
-						<button class="btn btn-secondary btn-pick" data-selectionP2="p" id="paperP2">
+						<button class="btn btn-secondary btn-pick" data-selectionP2="p" id="paperP2" data-imgURL="assets/images/paper.png">
 							<img src="assets/images/paper.png" class="img-thumbnail" alt="paper">
 						</button>
-						<button class="btn btn-secondary btn-pick" data-selectionP2="s" id="scissorsP2">
+						<button class="btn btn-secondary btn-pick" data-selectionP2="s" id="scissorsP2" data-imgURL="assets/images/scissors.png">
 							<img src="assets/images/scissors.png" class="img-thumbnail" alt="rock">
 						</button>
 					</div>

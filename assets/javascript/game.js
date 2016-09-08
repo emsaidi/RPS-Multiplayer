@@ -1,14 +1,15 @@
-  // Initialize Firebase
-  var config = {
-    apiKey: "AIzaSyAnP96C4pRrqEGJA-GxmQYr2pJaFb9lYfU",
-    authDomain: "alpha-30479.firebaseapp.com",
-    databaseURL: "https://alpha-30479.firebaseio.com",
-    storageBucket: "alpha-30479.appspot.com",
-  };
-  firebase.initializeApp(config);
+// Initialize Firebase
+var config = {
+	apiKey: "AIzaSyAnP96C4pRrqEGJA-GxmQYr2pJaFb9lYfU",
+	authDomain: "alpha-30479.firebaseapp.com",
+	databaseURL: "https://alpha-30479.firebaseio.com",
+	storageBucket: "alpha-30479.appspot.com",
+};
+
+firebase.initializeApp(config);
 
 // Variable to reference the database
-var database = firebase.database().ref('rpsGame');
+var database = firebase.database();
 
 //Initial Values
 var p1Wins = 0;
@@ -22,18 +23,19 @@ var p2Losses = 0;
 var P1 = "";
 var P2 = "";
 
-var guessP1;
-var guessP2;
+var guessP1 = "";
+var guessP2 = "";
+
 
 //At the initial load, get a snapshot of the current data.
-database.on("value", function(snapshot){
+database.ref().on("value", function (snapshot){
 
 	//If Firebase  has both players already set
-	if (snapshot.child("Player1").exists() && snapshot.child("Player2").exists()) {
+	if (snapshot.child("P1").exists() && snapshot.child("P2").exists()) {
 
 		// Set the initial variables for Players equal to stored values
-		P1 = snapshot.val().Player1;
-		P2 = snapshot.val().Player2;
+		P1 = snapshot.val().Player1.name;
+		P2 = snapshot.val().Player2.name;
 
 		// Change HTML to reflect the initial value
 		$('#playerName1').html(P1);
@@ -43,10 +45,10 @@ database.on("value", function(snapshot){
 		console.log("Player 1 Initial Value = " + P1 + " Player 2 Initial Value" + P2);
 
 	// If Firebase has Player 1 already set
-	}else if (snapshot.child("Player1").exists()){
+	}else if (snapshot.child("P1").exists()){
 
 		//Set the initial value of Player 1 equal to the store value
-		P1 = snapshot.val().Player1;
+		P1 = snapshot.val().Player1.name;
 
 		// Changet the HTML to reflect the initial value
 		$('#playerName1').html(P1);
@@ -62,6 +64,17 @@ database.on("value", function(snapshot){
 
 		console.log("Both Players should be empty")
 	}
+
+	if (snapshot.child('fguessP1').exists() && snapshot.child('fguessP2').exists()){
+		runRPS();
+		console.log("runRPS ran");
+
+		fguessP1 = snapshot.val().Player1.guessP1;
+		fguessP2 = snapshot.val().Player2.guessP2;
+		
+	}else{
+		console.log("A selection is needed");
+		}
 
 // If any errors are experienced, log them to the console
 }, function(errorObject) {
@@ -93,78 +106,56 @@ $('#btnName').on("click", function(){
 	}
 
 	//Print the new player names
-	console.log("Player1: " + P1 + " Player2: " + P2);
+	console.log('Player1: ' + P1 + ' Player2: ' + P2);
 
 	//Save the new names in Firebase
-	database.set({
-		Player1: P1,
-		Player2: P2
-	});
+	database.ref('Player1').child('name').set(P1);
+	database.ref('Player2').child('name').set(P2);
 
 	console.log("P1: " + P1 + " P2 " + P2);
 
 	return false;
 });
 
-$("#rockP1").on('click', function(){
+$('#p1Block').on('click', 'button', function(){
 	guessP1 = $(this).attr('data-selectionP1');
 	console.log(guessP1);
-	$('#p1Block').hide();
-	$('#p1BlockSelection').html('<button class="btn btn-secondary btn-selection" data-selectionP1="r" id="rockP1"><img src="assets/images/rock.png" class="img-thumbnail" alt="rock"></button>');
-});
 
-$("#paperP1").on('click', function(){
-	guessP1 = $(this).attr('data-selectionP1');
-	console.log(guessP1);
+	var guessP1imgURL = $(this).attr('data-imgURL');		
+	console.log(guessP1imgURL);
+
+	database.ref('Player1').child('guessP1').set(guessP1);
+
 	$('#p1Block').hide();
-	$('#p1BlockSelection').html('<button class="btn btn-secondary btn-selection" data-selectionP1="p" id="paperP1"><img src="assets/images/paper.png" class="img-thumbnail" alt="paper"></button>');
+	$('#p1BlockSelection').html('<button class="btn btn-secondary btn-selection" data-selectionP1="p" id="paperP2"><img src="' + guessP1imgURL + '" class="img-thumbnail" alt="paper"></button>');	
 	
-});
-
-$("#scissorsP1").on('click', function(){
-	guessP1 = $(this).attr('data-selectionP1');
-	console.log(guessP1);
-	$('#p1Block').hide();
-	$('#p1BlockSelection').html('<button class="btn btn-secondary btn-selection" data-selectionP1="s" id="scissorsP1"><img src="assets/images/scissors.png" class="img-thumbnail" alt="rock"></button>');
+	
 
 });
 
-$("#rockP2").on('click', function(){
-	guessP2 = $(this).attr('data-selectionP2');
-	console.log(guessP2);
-	$('#p2Block').hide();
-	$('#p2BlockSelection').html('<button class="btn btn-secondary btn-selection" data-selectionP2="r" id="rockP2"><img src="assets/images/rock.png" class="img-thumbnail" alt="rock"></button>');
-	//run();
-	runRPS();
-});
+$('#p2Block').on('click', 'button', function(){
+		guessP2 = $(this).attr('data-selectionP2');
+		console.log(guessP2);
 
-$("#paperP2").on('click', function(){
-	guessP2 = $(this).attr('data-selectionP2');
-	console.log(guessP2);
-	$('#p2Block').hide();
-	$('#p2BlockSelection').html('<button class="btn btn-secondary btn-selection" data-selectionP2="p" id="paperP2"><img src="assets/images/paper.png" class="img-thumbnail" alt="paper"></button>');
-	//run();
-	runRPS();
+		var guessP2imgURL = $(this).attr('data-imgURL');
+		console.log(guessP2imgURL);
 
-});
+		database.ref('Player2').child('guessP2').set(guessP2);
 
-$("#scissorsP2").on('click', function(){
-	guessP2 = $(this).attr('data-selectionP2');
-	console.log(guessP1);
-	$('#p2Block').hide();
-	$('#p2BlockSelection').html('<button class="btn btn-secondary btn-selection" data-selectionP2="s" id="scissorsP2"><img src="assets/images/scissors.png" class="img-thumbnail" alt="rock"></button>');
-	//run();
-	runRPS();
-});
+		$('#p2Block').hide();
+		$('#p2BlockSelection').html('<button class="btn btn-secondary btn-selection"><img src="' + guessP2imgURL + '" class="img-thumbnail" alt="paper"></button>');
+	
+	});
+
 
 function runRPS(){
-	if (((guessP1 == 'r') || (guessP1 == 'p') || (guessP1 == 's')) && ((guessP2 == 'r') || (guessP2 == 'p') || (guessP2 == 's'))){
+	console.log('Running RPS guessP1: ' + guessP1 + ' guessP2: ' + guessP2);
+
+	if (guessP1 && guessP2){
 
 		if ((guessP1 == 'r') && (guessP2 == 's')){
 			p1Wins++;
 			p2Losses++;
-
-
 
 		}else if ((guessP1 == 'r') && (guessP2 == 'p')){
 			p1Losses++;
@@ -199,9 +190,9 @@ function runRPS(){
 			Ties: Ties,
 			Player2Wins: p2Wins,
 			Player2Losses: p2Losses,
+
 		});
 
-		$("#scorecardData").append('<tr><td>' + P1 + '</td><td>' + p1Wins + '</td><td>' + p1Losses + '</td></tr><tr><td>' + P2 + '</td><td>' + p2Wins +'</td><td>' + p2Losses + '</td></tr>');
 
 
 		setTimeout(function() {
@@ -214,7 +205,13 @@ function runRPS(){
 			$('#ScoreboardAnnouncer').empty();
 			console.log("Divs should be back to normal");
 
+			database.ref('Player1').child('guessP1').set(null);
+			database.ref('Player2').child('guessP2').set(null);
+
 		}, 3000);
+
+	}else{
+		console.log("Something went wrong and RPS is not running");
 	}
 }
 
