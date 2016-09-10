@@ -31,11 +31,11 @@ var guessP2 = "";
 database.ref().on("value", function (snapshot){
 
 	//If Firebase  has both players already set
-	if (snapshot.child("P1").exists() && snapshot.child("P2").exists()) {
+	if (snapshot.child("Player1/name").exists() && snapshot.child("Player2/name").exists()) {
 
 		// Set the initial variables for Players equal to stored values
-		P1 = snapshot.val().Player1.name;
-		P2 = snapshot.val().Player2.name;
+		P1 = snapshot.child('Player1/name');
+		P2 = snapshot.child('Player2/name');
 
 		// Change HTML to reflect the initial value
 		$('#playerName1').html(P1);
@@ -45,11 +45,10 @@ database.ref().on("value", function (snapshot){
 		console.log("Player 1 Initial Value = " + P1 + " Player 2 Initial Value" + P2);
 
 	// If Firebase has Player 1 already set
-	}else if (snapshot.child("P1").exists()){
+	}else if (snapshot.child("Player1/name").exists()){
 
-		//Set the initial value of Player 1 equal to the store value
-		P1 = snapshot.val().Player1.name;
-
+		P1 = snapshot.child('Player1/name');
+		
 		// Changet the HTML to reflect the initial value
 		$('#playerName1').html(P1);
 		$('#playerName2').html(P2);
@@ -64,25 +63,12 @@ database.ref().on("value", function (snapshot){
 
 		console.log("Both Players should be empty")
 	}
-
-	if (snapshot.child('fguessP1').exists() && snapshot.child('fguessP2').exists()){
-		runRPS();
-		console.log("runRPS ran");
-
-		fguessP1 = snapshot.val().Player1.guessP1;
-		fguessP2 = snapshot.val().Player2.guessP2;
-		
-	}else{
-		console.log("A selection is needed");
-		}
-
 // If any errors are experienced, log them to the console
 }, function(errorObject) {
 
 	console.log("The read failed: " + errorObject.code);
 
 }
-
 );
 
 // Whenever the user cliks the Start button
@@ -100,10 +86,12 @@ $('#btnName').on("click", function(){
 		//add inputed name to P1
 		P1 = $('#inputName').val().trim();
 	// is not working!!!!! - talk to TAs
-	}else if(P2){
-		$('#btnName').off();
-
 	}
+
+	//else if(P2){
+		//$('#btnName').off();
+
+	//}
 
 	//Print the new player names
 	console.log('Player1: ' + P1 + ' Player2: ' + P2);
@@ -112,9 +100,23 @@ $('#btnName').on("click", function(){
 	database.ref('Player1').child('name').set(P1);
 	database.ref('Player2').child('name').set(P2);
 
-	console.log("P1: " + P1 + " P2 " + P2);
+	console.log(" Names have been sent to the database. P1: " + P1 + " P2 " + P2);
 
 	return false;
+});
+
+database.ref().on("value", function (snapshot){
+
+	if (snapshot.child('Player1/guessP1').exists() && snapshot.child('Player2/guessP2').exists()){
+			runRPS();
+			console.log("runRPS ran");
+		}else{
+			console.log("A selection is needed");
+		}
+}, function(errorObject) {
+
+	console.log("The read failed: " + errorObject.code);
+
 });
 
 $('#p1Block').on('click', 'button', function(){
@@ -141,6 +143,8 @@ $('#p2Block').on('click', 'button', function(){
 		console.log(guessP2imgURL);
 
 		database.ref('Player2').child('guessP2').set(guessP2);
+
+
 
 		$('#p2Block').hide();
 		$('#p2BlockSelection').html('<button class="btn btn-secondary btn-selection"><img src="' + guessP2imgURL + '" class="img-thumbnail" alt="paper"></button>');
@@ -184,12 +188,14 @@ function runRPS(){
 
 		console.log("P1Wins: " + p1Wins + " P1Losses: " + p1Losses + " Ties: " + Ties + " P2Wins: " + p2Wins + " P2Losses: " + p2Losses);
 
-		database.set({
+		database.ref().child('Player1').set({
 			Player1Wins: p1Wins,
-			Player1Losses: p1Losses,
-			Ties: Ties,
+			Player1Losses: p1Losses
+		});
+
+		database.ref().child('Player2').set({
 			Player2Wins: p2Wins,
-			Player2Losses: p2Losses,
+			Player2Losses: p2Losses
 
 		});
 
@@ -205,8 +211,8 @@ function runRPS(){
 			$('#ScoreboardAnnouncer').empty();
 			console.log("Divs should be back to normal");
 
-			database.ref('Player1').child('guessP1').set(null);
-			database.ref('Player2').child('guessP2').set(null);
+			database.ref().child('Player1/guessP1').set(null);
+			database.ref().child('Player2/guessP2').set(null);
 
 		}, 3000);
 
