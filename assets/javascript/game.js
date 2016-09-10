@@ -20,48 +20,42 @@ var Ties = 0;
 var p2Wins = 0;
 var p2Losses = 0;
 
-var P1 = "";
-var P2 = "";
+var P1;
+var P2;
 
-var guessP1 = "";
-var guessP2 = "";
+var guessP1;
+var guessP2;
 
 
 //At the initial load, get a snapshot of the current data.
 database.ref().on("value", function (snapshot){
 
 	//If Firebase  has both players already set
-	if (snapshot.child("Player1/name").exists() && snapshot.child("Player2/name").exists()) {
+	//if (snapshot.child("Player1/name").exists() && snapshot.child("Player2/name").exists()) {
 
-		// Set the initial variables for Players equal to stored values
-		P1 = snapshot.child('Player1/name');
-		P2 = snapshot.child('Player2/name');
-
-		// Change HTML to reflect the initial value
-		$('#playerName1').html(P1);
-		$('#playerName2').html(P2);
-
-		// Print the initial data to the console
-		console.log("Player 1 Initial Value = " + P1 + " Player 2 Initial Value" + P2);
+		//alert("There is not space for you :(");
+		
 
 	// If Firebase has Player 1 already set
-	}else if (snapshot.child("Player1/name").exists()){
+	if (snapshot.child('Player1/name').exists()){
 
-		P1 = snapshot.child('Player1/name');
+		P1 = snapshot.val().Player1.name;
 		
 		// Changet the HTML to reflect the initial value
 		$('#playerName1').html(P1);
-		$('#playerName2').html(P2);
+		//$('#playerName2').html(P2);
 
 		// Print the initial data to console
-		console.log("Player 1 Iinitial Value = " + P1 + " Player 2 should be empty");
+		console.log("Player 1 set: " + P1);
+	}
 	
 	// No store values, so values should be empty
-	}else {
-		$('#playerName1').html(P1);
+	if (snapshot.child("Player2/name").exists()) {
+		P2 = snapshot.val().Player2.name;
+
 		$('#playerName2').html(P2);
 
-		console.log("Both Players should be empty")
+		console.log("Player 2 set: " + P2)
 	}
 // If any errors are experienced, log them to the console
 }, function(errorObject) {
@@ -74,45 +68,38 @@ database.ref().on("value", function (snapshot){
 // Whenever the user cliks the Start button
 $('#btnName').on("click", function(){
 
-	// If Player1 already exists in database
-	if (P1){
-
-		//The name inputed will be added to the system will be added to P2.
-		P2 = $('#inputName').val().trim();
-
 	//If no Player1 or Player2 exists 
-	}else if(P1 != null){
+	if(typeof P1 === "undefined"){
 
 		//add inputed name to P1
 		P1 = $('#inputName').val().trim();
-	// is not working!!!!! - talk to TAs
+	    database.ref('Player1').child('name').set(P1);
+	}else if (typeof P2 === "undefined"){
+
+		//The name inputed will be added to the system will be added to P2.
+		P2 = $('#inputName').val().trim();
+		database.ref('Player2').child('name').set(P2);
+
+	}else if(P2){
+		$('#btnName').off();
+
 	}
-
-	//else if(P2){
-		//$('#btnName').off();
-
-	//}
-
-	//Print the new player names
-	console.log('Player1: ' + P1 + ' Player2: ' + P2);
-
-	//Save the new names in Firebase
-	database.ref('Player1').child('name').set(P1);
-	database.ref('Player2').child('name').set(P2);
-
-	console.log(" Names have been sent to the database. P1: " + P1 + " P2 " + P2);
 
 	return false;
 });
 
 database.ref().on("value", function (snapshot){
+	if (snapshot.child('Player1').exists()){
+	guessP1 = snapshot.val().Player1.guessP1;
+	}
+	 
 
-	if (snapshot.child('Player1/guessP1').exists() && snapshot.child('Player2/guessP2').exists()){
-			runRPS();
-			console.log("runRPS ran");
-		}else{
-			console.log("A selection is needed");
-		}
+	if (snapshot.child('Player2').exists()){
+	 guessP2 = snapshot.val().Player2.guessP2;
+	}
+
+	runRPS();
+	console.log("runRPS ran inside of the on telegraph");
 }, function(errorObject) {
 
 	console.log("The read failed: " + errorObject.code);
