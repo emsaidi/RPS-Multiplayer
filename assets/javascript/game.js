@@ -22,6 +22,12 @@ var P2;
 var guessP1;
 var guessP2;
 
+var P1chatInput;
+var P2chatInput;
+
+var PlayerNum = 0;
+var PlayerNum = 0;
+
 
 //At the initial load, get a snapshot of the current data.
 database.ref().on("value", function (snapshot){
@@ -38,8 +44,8 @@ database.ref().on("value", function (snapshot){
 		// Print the initial data to console
 		console.log("Player 1 set: " + P1);
 
-		database.ref().child('Player1').onDisconnect().remove();
-		
+		PlayerNum = 1;
+
 	}
 	
 	// No store values, so values should be empty
@@ -51,7 +57,7 @@ database.ref().on("value", function (snapshot){
 
 		console.log("Player 2 set: " + P2)
 
-		database.ref().child('Player2').onDisconnect().remove();
+		PlayerNum = 2;
 
 	}
 // If any errors are experienced, log them to the console
@@ -71,12 +77,17 @@ $('#btnName').on("click", function(){
 		//add inputed name to P1
 		P1 = $('#inputName').val().trim();
 	    database.ref('Player1').child('name').set(P1);
+	    database.ref().child('Player1').onDisconnect().remove();
+
+
+
 
 	}else if (typeof P2 === "undefined"){
 
 		//The name inputed will be added to the system will be added to P2.
 		P2 = $('#inputName').val().trim();
 		database.ref('Player2').child('name').set(P2);
+		database.ref().child('Player2').onDisconnect().remove();
 
 	}else if(P2){
 		$('#btnName').off();
@@ -199,3 +210,24 @@ function P2Wins(){
 function YouTie(){
 	$('<div>').html('<h4 class="card-title">You Tie!</h3><img class="img-thumbnail" src="assets/images/Blue_Stripe_Tie.jpg" alt="trophy">').appendTo('#ScoreboardAnnouncer');
 }
+
+$('#chatBtn').on('click', function (){
+	if (PlayerNum === 1){
+		P1chatInput = $('#chatinput').val().trim();
+		database.ref().child('Player1/chat').push(P1 + ": " + P1chatInput);
+
+		
+
+
+	}else if (PlayerNum ===2){
+		P2chatInput = $('#chatinput').val().trim();
+		database.ref().child('Player2/chat').push(P2 + ": " + P2chatInput);
+
+		
+
+	}
+
+});
+
+// $('<p>').html(P1chatInput).appendTo('#chatText');
+// $('<p>').html(P2chatInput).appendTo('#chatText');
