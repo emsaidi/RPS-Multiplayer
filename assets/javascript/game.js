@@ -250,7 +250,7 @@ database.ref("Player1").child("chat").on("child_added", function (childSnapshot)
 	
 });
 
-database.ref('Player2').child("chat").on("child_changed", function (snapshot){
+database.ref('Player2').child("chat").on("child_changed", function (childSnapshot){
  
 	var chatObject = childSnapshot.val().line;
 
