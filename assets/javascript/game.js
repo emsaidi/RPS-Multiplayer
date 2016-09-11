@@ -81,6 +81,8 @@ $('#btnName').on("click", function (){
 
 	    PlayerNum = 1;
 
+	    $('#inputName').val("");
+
 
 
 	}else if (typeof P2 === "undefined"){
@@ -89,7 +91,10 @@ $('#btnName').on("click", function (){
 		P2 = $('#inputName').val().trim();
 		database.ref('Player2').child('name').set(P2);
 		database.ref().child('Player2').onDisconnect().remove();
+		
 		PlayerNum = 2;
+
+		$('#inputName').val("");
 
 	}else if(P2){
 		$('#btnName').off();

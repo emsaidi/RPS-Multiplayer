@@ -1,10 +1,27 @@
+body{
+	background-image: url(../images/rock-paper-scissors.png);
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    background-color: #383733;
+    background-attachment: fixed;
+    color: #eee;
+
+}
+
+
+
 .page-header {
-	padding-bottom: .75em;
+	padding: 1.2em 0 .5em 1.2em;
 	margin: 3em 0 1.5em;
 	border-bottom: .1em solid #eee;
+	background-color: rgba(0, 0, 0, 0.5);
+	font-family: 'Waiting for the Sunrise', cursive;
 }
 .img-thumbnail{
 	border: 0;
+	opacity: .8;
 }
 
 .btn-pick{
@@ -22,3 +39,40 @@
 #scorecardTable{
 	width: 100%;
 }
+
+.card{
+	background-color: rgba(0, 0, 0, 0.5);
+}
+
+.card-header{
+	background-color: rgba(0, 0, 0, 0.5);
+}
+
+.btn{
+	background-color: rgba(0, 0, 0, 0.7);
+}
+
+.btn:focus, .btn:active:focus, .btn.active:focus {
+    background: rgba(0, 0, 0, 0.4);
+    color: #aaa;
+    outline: #aaa;
+}
+
+.btn-secondary{
+	color:#eee;
+}
+
+.btn-secondary:hover, .btn-primary:focus, .btn-secondary:active, .btn-secondary.active, .open > .dropdown-toggle.btn-secondary {
+    background: rgba(0, 0, 0, 0.7);
+    color: #aaa;
+}
+
+.btn-secondary:active, .btn-secondary.active {
+    background: #007299;
+    box-shadow: none;
+}
+
+.form-control{
+	background-color: rgba(0, 0, 0, 0.5);
+}
+
