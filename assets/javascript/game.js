@@ -13,12 +13,8 @@ var database = firebase.database();
 
 //Initial Values
 var p1Wins = 0;
-var p1Losses = 0;
-
-var Ties = 0;
-
 var p2Wins = 0;
-var p2Losses = 0;
+var Ties = 0;
 
 var P1;
 var P2;
@@ -30,12 +26,6 @@ var guessP2;
 //At the initial load, get a snapshot of the current data.
 database.ref().on("value", function (snapshot){
 
-	//If Firebase  has both players already set
-	//if (snapshot.child("Player1/name").exists() && snapshot.child("Player2/name").exists()) {
-
-		//alert("There is not space for you :(");
-		
-
 	// If Firebase has Player 1 already set
 	if (snapshot.child('Player1/name').exists()){
 
@@ -43,10 +33,13 @@ database.ref().on("value", function (snapshot){
 		
 		// Changet the HTML to reflect the initial value
 		$('#playerName1').html(P1);
-		//$('#playerName2').html(P2);
+		$('#p1ScorecardName').html(P1);
 
 		// Print the initial data to console
 		console.log("Player 1 set: " + P1);
+
+		database.ref().child('Player1').onDisconnect().remove();
+		
 	}
 	
 	// No store values, so values should be empty
@@ -54,8 +47,12 @@ database.ref().on("value", function (snapshot){
 		P2 = snapshot.val().Player2.name;
 
 		$('#playerName2').html(P2);
+		$('#p2ScorecardName').html(P2);
 
 		console.log("Player 2 set: " + P2)
+
+		database.ref().child('Player2').onDisconnect().remove();
+
 	}
 // If any errors are experienced, log them to the console
 }, function(errorObject) {
@@ -74,6 +71,7 @@ $('#btnName').on("click", function(){
 		//add inputed name to P1
 		P1 = $('#inputName').val().trim();
 	    database.ref('Player1').child('name').set(P1);
+
 	}else if (typeof P2 === "undefined"){
 
 		//The name inputed will be added to the system will be added to P2.
@@ -99,7 +97,8 @@ database.ref().on("value", function (snapshot){
 	}
 
 	runRPS();
-	console.log("runRPS ran inside of the on telegraph");
+	console.log("runRPS ran inside of the on value");
+
 }, function(errorObject) {
 
 	console.log("The read failed: " + errorObject.code);
@@ -131,8 +130,6 @@ $('#p2Block').on('click', 'button', function(){
 
 		database.ref('Player2').child('guessP2').set(guessP2);
 
-
-
 		$('#p2Block').hide();
 		$('#p2BlockSelection').html('<button class="btn btn-secondary btn-selection"><img src="' + guessP2imgURL + '" class="img-thumbnail" alt="paper"></button>');
 	
@@ -146,26 +143,20 @@ function runRPS(){
 
 		if ((guessP1 == 'r') && (guessP2 == 's')){
 			p1Wins++;
-			p2Losses++;
-
+			P1Wins();
 		}else if ((guessP1 == 'r') && (guessP2 == 'p')){
-			p1Losses++;
 			p2Wins++;
 			P2Wins();
 		}else if ((guessP1 == 's') && (guessP2 == 'r')){
-			p1Losses++;
 			p2Wins++;
 			P2Wins();
 		}else if ((guessP1 == 's') && (guessP2 == 'p')){
 			p1Wins++;
-			p2Losses++;
 			P1Wins();
 		}else if((guessP1 == 'p') && (guessP2 == 'r')){
 			p1Wins++;
-			p2Losses++;
 			P1Wins();
 		}else if((guessP1 == 'p') && (guessP2 == 's')){
-			p1Losses++;
 			p2Wins++;
 			P2Wins();
 		}else if(guessP1 == guessP2){
@@ -173,20 +164,9 @@ function runRPS(){
 			YouTie();
 		}
 
-		console.log("P1Wins: " + p1Wins + " P1Losses: " + p1Losses + " Ties: " + Ties + " P2Wins: " + p2Wins + " P2Losses: " + p2Losses);
+		$('#p1WinsScorecard').html(p1Wins);
 
-		database.ref().child('Player1').set({
-			Player1Wins: p1Wins,
-			Player1Losses: p1Losses
-		});
-
-		database.ref().child('Player2').set({
-			Player2Wins: p2Wins,
-			Player2Losses: p2Losses
-
-		});
-
-
+		$('#p2WinsScorecard').html(p2Wins);
 
 		setTimeout(function() {
 			$('#p1Block').show();
@@ -219,13 +199,3 @@ function P2Wins(){
 function YouTie(){
 	$('<div>').html('<h4 class="card-title">You Tie!</h3><img class="img-thumbnail" src="assets/images/Blue_Stripe_Tie.jpg" alt="trophy">').appendTo('#ScoreboardAnnouncer');
 }
-
-
-// we still need guessP1 and guessP2
-
-//player 1 picks button, this becomes his selection in database
-//player 2 picks button, this becomes his select in database
-//we retrive selection and run logic on it
-// wins, losses, ties are added
-// this then are pushed back into database
-// from database are added to html
