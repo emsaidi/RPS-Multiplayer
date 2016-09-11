@@ -91,7 +91,7 @@ $('#btnName').on("click", function (){
 		P2 = $('#inputName').val().trim();
 		database.ref('Player2').child('name').set(P2);
 		database.ref().child('Player2').onDisconnect().remove();
-		
+
 		PlayerNum = 2;
 
 		$('#inputName').val("");
@@ -166,7 +166,7 @@ $('#p1Block').on('click', 'button', function(){
 	database.ref('Player1').child('guessP1').set(guessP1);
 
 	$('#p1Block').hide();
-	$('#p1BlockSelection').html('<button class="btn btn-secondary btn-selection" data-selectionP1="p" id="paperP2"><img src="' + guessP1imgURL + '" class="img-thumbnail" alt="paper"></button>');	
+	$('#p1BlockSelection').html('<button class="btn btn-secondary btn-selection" data-selectionP1="p" id="paperP2"><img src="' + guessP1imgURL + '" class="img-fluid img-rounded" alt="paper"></button>');	
 	
 	
 
@@ -182,7 +182,7 @@ $('#p2Block').on('click', 'button', function(){
 		database.ref('Player2').child('guessP2').set(guessP2);
 
 		$('#p2Block').hide();
-		$('#p2BlockSelection').html('<button class="btn btn-secondary btn-selection"><img src="' + guessP2imgURL + '" class="img-thumbnail" alt="paper"></button>');
+		$('#p2BlockSelection').html('<button class="btn btn-secondary btn-selection"><img src="' + guessP2imgURL + '" class="img-fluid img-rounded" alt="paper"></button>');
 	
 	});
 
@@ -240,15 +240,15 @@ function runRPS(){
 }
 
 function P1Wins(){
-	$('<div>').html('<h4 class="card-title">' + P1 + ' WINS!!!!</h4><img class="img-thumbnail" src="assets/images/social_01.jpg" alt="trophy">').appendTo('#ScoreboardAnnouncer');
+	$('<div>').html('<h4 class="card-title">' + P1 + ' WINS!!!!</h4><img class="img-thumbnail" src="assets/images/trophy.png" alt="trophy">').appendTo('#ScoreboardAnnouncer');
 }
 
 function P2Wins(){
-	$('<div>').html('<h4 class="card-title">' + P2 + ' WINS!!!!</h3><img class="img-thumbnail" src="assets/images/social_01.jpg" alt="trophy">').appendTo('#ScoreboardAnnouncer');
+	$('<div>').html('<h4 class="card-title">' + P2 + ' WINS!!!!</h3><img class="img-thumbnail" src="assets/images/trophy.png" alt="trophy">').appendTo('#ScoreboardAnnouncer');
 }
 
 function YouTie(){
-	$('<div>').html('<h4 class="card-title">You Tie!</h3><img class="img-thumbnail" src="assets/images/Blue_Stripe_Tie.jpg" alt="trophy">').appendTo('#ScoreboardAnnouncer');
+	$('<div>').html('<h4 class="card-title">You Tie!</h3><img class="img-thumbnail" src="assets/images/Tie.png" alt="trophy">').appendTo('#ScoreboardAnnouncer');
 }
 
 $('#chatBtn').on('click', function (){

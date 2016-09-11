@@ -20,8 +20,9 @@ body{
 	font-family: 'Waiting for the Sunrise', cursive;
 }
 .img-thumbnail{
-	border: 0;
+	border: none;
 	opacity: .8;
+	color: none;
 }
 
 .btn-pick{
@@ -60,6 +61,11 @@ body{
 
 .btn-secondary{
 	color:#eee;
+	border-color: #444;
+}
+
+.btn-pick{
+	border-color: none;
 }
 
 .btn-secondary:hover, .btn-primary:focus, .btn-secondary:active, .btn-secondary.active, .open > .dropdown-toggle.btn-secondary {
