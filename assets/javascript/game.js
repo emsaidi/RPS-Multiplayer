@@ -99,6 +99,38 @@ $('#btnName').on("click", function (){
 	return false;
 });
 
+$("#inputName").keypress(function(event) {
+    if (event.which == 13) {
+    	if(typeof P1 === "undefined"){
+
+			//add inputed name to P1
+			P1 = $('#inputName').val().trim();
+	   		database.ref('Player1').child('name').set(P1);
+	    	database.ref().child('Player1').onDisconnect().remove();
+
+	   		PlayerNum = 1;
+
+
+
+		}else if (typeof P2 === "undefined"){
+
+			//The name inputed will be added to the system will be added to P2.
+			P2 = $('#inputName').val().trim();
+			database.ref('Player2').child('name').set(P2);
+			database.ref().child('Player2').onDisconnect().remove();
+			
+			PlayerNum = 2;
+
+		}else if(P2){
+
+			$('#btnName').off();
+
+		}
+
+		return false;
+    }
+});
+
 
 database.ref().on("value", function (snapshot){
 	if (snapshot.child('Player1').exists()){
