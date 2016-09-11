@@ -69,7 +69,7 @@ database.ref().on("value", function (snapshot){
 );
 
 // Whenever the user cliks the Start button
-$('#btnName').on("click", function(){
+$('#btnName').on("click", function (){
 
 	//If no Player1 or Player2 exists 
 	if(typeof P1 === "undefined"){
@@ -98,6 +98,7 @@ $('#btnName').on("click", function(){
 
 	return false;
 });
+
 
 database.ref().on("value", function (snapshot){
 	if (snapshot.child('Player1').exists()){
@@ -238,6 +239,31 @@ $('#chatBtn').on('click', function (){
 
 });
 
+$("#chatInput").keypress(function(event) {
+    if (event.which == 13) {
+
+    	if (PlayerNum === 1){
+			P1chatInput = $('#chatInput').val();
+			var chatLine = {line: P1chatInput};
+			database.ref().child('Player1/chat').push(chatLine);
+		
+			console.log("Player 1 typed and said: " + chatLine);
+
+			$('#chatInput').val("");
+
+		}else if (PlayerNum ===2){
+			P2chatInput = $('#chatInput').val();
+			var chatLine = {line: P2chatInput};
+			database.ref().child('Player2/chat').push(chatLine);
+			$('#chatInput').val("");
+			console.log("Player 2 typed and said: " + chatLine);
+
+		}
+
+		return false;
+
+    }
+});
 
 database.ref("Player1").child("chat").on("child_added", function (childSnapshot){
  	
