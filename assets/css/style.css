@@ -80,5 +80,11 @@ body{
 
 .form-control{
 	background-color: rgba(0, 0, 0, 0.5);
+	color: #eee;
+}
+
+.textarea, .form-control:active, .form-control:focus{
+	background-color: rgba(0, 0, 0, 0.9);
+	color: #eee;
 }
 
