@@ -44,7 +44,7 @@ database.ref().on("value", function (snapshot){
 		// Print the initial data to console
 		console.log("Player 1 set: " + P1);
 
-		PlayerNum = 1;
+		
 
 	}
 	
@@ -57,7 +57,7 @@ database.ref().on("value", function (snapshot){
 
 		console.log("Player 2 set: " + P2)
 
-		PlayerNum = 2;
+		
 
 	}
 // If any errors are experienced, log them to the console
@@ -79,6 +79,7 @@ $('#btnName').on("click", function(){
 	    database.ref('Player1').child('name').set(P1);
 	    database.ref().child('Player1').onDisconnect().remove();
 
+	    PlayerNum = 1;
 
 
 
@@ -88,6 +89,7 @@ $('#btnName').on("click", function(){
 		P2 = $('#inputName').val().trim();
 		database.ref('Player2').child('name').set(P2);
 		database.ref().child('Player2').onDisconnect().remove();
+		PlayerNum = 2;
 
 	}else if(P2){
 		$('#btnName').off();
@@ -212,22 +214,49 @@ function YouTie(){
 }
 
 $('#chatBtn').on('click', function (){
+	console.log("Chat button was pushed");
+
 	if (PlayerNum === 1){
-		P1chatInput = $('#chatinput').val().trim();
-		database.ref().child('Player1/chat').push(P1 + ": " + P1chatInput);
-
+		P1chatInput = $('#chatInput').val();
+		var chatLine = {line: P1chatInput};
+		database.ref().child('Player1/chat').push(chatLine);
 		
+		console.log("Player 1 typed and said: " + chatLine);
 
+		$('#chatInput').val("");
 
 	}else if (PlayerNum ===2){
-		P2chatInput = $('#chatinput').val().trim();
-		database.ref().child('Player2/chat').push(P2 + ": " + P2chatInput);
-
-		
+		P2chatInput = $('#chatInput').val();
+		var chatLine = {line: P2chatInput};
+		database.ref().child('Player2/chat').push(chatLine);
+		$('#chatInput').val("");
+		console.log("Player 2 typed and said: " + chatLine);
 
 	}
 
+	return false;
+
 });
 
-// $('<p>').html(P1chatInput).appendTo('#chatText');
+
+database.ref("Player1").child("chat").on("child_added", function (childSnapshot){
+ 	
+ 	var chatObject = childSnapshot.val().line;
+
+ 	console.log("this is chat object from db: " + chatObject)
+	
+	$('#chatText').append('<p class="card-text">' + P1 + ": " + chatObject + '</p>');
+
+	
+});
+
+database.ref('Player2').child("chat").on("child_changed", function (snapshot){
+ 
+	var chatObject = childSnapshot.val().line;
+
+ 	console.log("this is chat object from db: " + chatObject)
+	
+	$('#chatText').append('<p class="card-text">' + P2 + ": " + chatObject + '</p>');
+});
+
 // $('<p>').html(P2chatInput).appendTo('#chatText');
